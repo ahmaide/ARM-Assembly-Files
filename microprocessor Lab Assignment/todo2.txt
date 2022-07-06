@@ -1,0 +1,87 @@
+;The semicolon is used to lead an inline documentation
+;
+;When you write your program, you could have your info at the top document block
+;For Example: Your Name, Student Number, what the program is for, and what it does etc.
+;
+; This program will count the length of a string.
+;
+;;; Directives
+	PRESERVE8
+	THUMB 
+; Vector Table Mapped to Address 0 at Reset
+; Linker requires __Vectors to be exported
+
+INITIAL_MSP EQU 0x20001000 ;
+
+	AREA RESET, DATA, READONLY
+	EXPORT __Vectors
+__Vectors 
+	DCD 0x20001000 ; stack pointer value when stack is empty
+	DCD Reset_Handler ; reset vector
+ 
+	ALIGN
+ 
+string1
+	DCB "ARM assembly language is important to learn!",0 
+; The program
+; Linker requires Reset_Handler
+
+
+	AREA MYCODE, CODE, READONLY
+	ENTRY
+	EXPORT Reset_Handler
+
+function0	PROC
+	
+	ENDP
+Reset_Handler
+;;;;;;;;;;User Code Start from the next line;;;;;;;;;;;;
+	LDR R0, = string1 ;
+	MOV R7, #65
+	MOV R8, #90
+	MOV R9, #97
+	MOV R10, #122
+	LDRB R3, [R0]
+	
+Loop	
+	CMP R3, #'A'
+	BEQ vowel
+	CMP R3, #'E'
+	BEQ vowel
+	CMP R3, #'I'
+	BEQ vowel
+	CMP R3, #'O'
+	BEQ vowel
+	CMP R3, #'U'
+	BEQ vowel
+	CMP R3, #'a'
+	BEQ vowel
+	CMP R3, #'e'
+	BEQ vowel
+	CMP R3, #'i'
+	BEQ vowel
+	CMP R3, #'o'
+	BEQ vowel
+	CMP R3, #'u'
+	BEQ vowel
+	SUBS R5, R8, R3
+	BMI notCapital
+	SUBS R5, R3, R7
+	BMI No
+	ADD R2, R2, #1
+	B No
+notCapital 	SUBS R5, R10, R3
+	BMI No
+	SUBS R5, R3, R9
+	BMI No
+	ADD R2, R2, #1
+	B No
+vowel	ADD R1, R1, #1
+No 	ADD R0, R0, #1
+	LDRB R3, [R0]
+	CMP R3, #0
+	BNE Loop
+	
+STOP
+	B STOP
+	END 
